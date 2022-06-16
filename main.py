@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from redis import Redis
 import config
+from typing import Union
 
 
 settings = config.Settings()
@@ -10,12 +11,16 @@ redis = Redis(
     port=settings.redis_port,
     password=settings.redis_password,
     db=settings.redis_db,
+    charset="utf-8",
+    decode_responses=True,
 )
+
+item_type = Union[str, int]
 
 
 class Item(BaseModel):
-    key: int
-    value: int
+    key: item_type
+    value: item_type
 
 
 app = FastAPI()
@@ -27,13 +32,13 @@ async def root():
 
 
 @app.get("/get/{key}")
-async def get_key(key: int):
-    return {"message": f"Value of key {key} is {int(redis.lindex(key, -1))}"}
+async def get_key(key: item_type):
+    return {"message": f"Value of key {key} is {redis.lindex(key, -1)}"}
 
 
 @app.get("/history/{key}")
-async def get_key_history(key: int):
-    return {"message": f"History of {key} is {[int(x) for x in redis.lrange(key, 0, -1)]}"}
+async def get_key_history(key: item_type):
+    return {"message": f"History of {key} is {redis.lrange(key, 0, -1)}"}
 
 
 @app.post("/set/")
