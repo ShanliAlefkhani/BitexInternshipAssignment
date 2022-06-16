@@ -15,8 +15,8 @@ if __name__ == '__main__':
         elif args[0] == 'set':
             response = post(settings.base_url + '/set', json={'key': args[1], 'value': args[2]})
         else:
-            raise KeyError()
-    except (IndexError, KeyError):
+            raise ValueError()
+    except (IndexError, ValueError):
         print("Invalid command")
     else:
         print(response.json().get("message"))
