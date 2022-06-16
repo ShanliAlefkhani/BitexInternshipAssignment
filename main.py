@@ -37,6 +37,6 @@ async def get_key_history(key: int):
 
 
 @app.post("/set/")
-async def post_key(item: Item):
+async def set_value(item: Item):
     redis.rpush(item.key, item.value)
     return {"message": f"Value of {item.key} set to {item.value}"}
