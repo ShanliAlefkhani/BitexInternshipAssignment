@@ -9,11 +9,11 @@ if __name__ == '__main__':
 
     try:
         if args[0] == 'get':
-            response = get(settings.url + f'/get/{args[1]}')
+            response = get(settings.base_url + f'/get/{args[1]}')
         elif args[0] == 'history':
-            response = get(settings.url + f'/history/{args[1]}')
+            response = get(settings.base_url + f'/history/{args[1]}')
         elif args[0] == 'set':
-            response = post(settings.url + '/set', json={'key': args[1], 'value': args[2]})
+            response = post(settings.base_url + '/set', json={'key': args[1], 'value': args[2]})
         else:
             raise KeyError()
     except (IndexError, KeyError):
