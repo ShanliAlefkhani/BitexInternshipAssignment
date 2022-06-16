@@ -1,0 +1,22 @@
+from requests import get, post
+import sys
+import config
+
+
+if __name__ == '__main__':
+    settings = config.Settings()
+    args = sys.argv[1:]
+
+    try:
+        if args[0] == 'get':
+            response = get(settings.url + f'/get/{args[1]}')
+        elif args[0] == 'history':
+            response = get(settings.url + f'/history/{args[1]}')
+        elif args[0] == 'set':
+            response = post(settings.url + '/set', json={'key': args[1], 'value': args[2]})
+        else:
+            raise KeyError()
+    except (IndexError, KeyError):
+        print("Invalid command")
+    else:
+        print(response.json().get("message"))
